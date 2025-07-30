@@ -13,6 +13,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    outputs:
+      artifact-path: ${{ steps.upload_build.outputs.artifact-name }}
     steps:
     - uses: actions/checkout@v4
 
@@ -22,13 +24,47 @@ jobs:
         go-version: '1.24.5'
 
     - name: Build
-      run: go build -v ./...
+      run: GOOS=linux GOARCH=amd64 go build -v ./... -o myapp-linux
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v ./... --json > test-results.json
 
-    - name: Upload Go test results
+    - name: Upload build artifact
+      id: upload_build
       uses: actions/upload-artifact@v4
       with:
-        name: Go-results-${{ matrix.go-version }}
-        path: TestResults-${{ matrix.go-version }}.json
+        name: build-artifact
+        path: myapp-linux
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: test-results.json
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+
+      - name: Download test results
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: build-artifact,test-results.json
+          tag: ${{ github.ref_name }}
+          allowUpdates: true
+          body: Automatically generated release for tag ${{ github.ref_name }}
