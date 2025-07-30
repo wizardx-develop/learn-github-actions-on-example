@@ -2,9 +2,10 @@ package numbers_test
 
 import (
 	"fmt"
-	"learnsort/numbers"
 	"slices"
 	"testing"
+
+	numbers "github.com/wizardx-develop/learn-github-actions-on-example/numbers"
 )
 
 func TestFindPrimeNumbers(t *testing.T) {
