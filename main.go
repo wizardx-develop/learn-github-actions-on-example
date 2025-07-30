@@ -9,4 +9,7 @@ import (
 func main() {
 	s := numbers.FindPrimeNumbers(10)
 	fmt.Printf("%v\n", s)
+
+	s = numbers.FindPrimeNumbers(35)
+	fmt.Printf("%v\n", s)
 }
