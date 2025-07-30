@@ -15,4 +15,7 @@ func main() {
 
 	s = numbers.FindPrimeNumbers(100)
 	fmt.Printf("%v\n", s)
+
+	s = numbers.FindPrimeNumbers(100)
+	fmt.Printf("%v\n", s)
 }
