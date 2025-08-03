@@ -2,20 +2,30 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"strconv"
 
 	"github.com/wizardx-develop/learn-github-actions-on-example/numbers"
 )
 
+func getInputNumber() float64 {
+	input := os.Getenv("NUMBER")
+	if input == "" {
+		log.Fatalf("Number doesn't to be empty")
+		return 0.0
+	}
+
+	number, err := strconv.Atoi(input)
+	if err != nil {
+		log.Fatalf("Error while parsing number: %v", err)
+		return 0.0
+	}
+	return float64(number)
+}
+
 func main() {
-	s := numbers.FindPrimeNumbers(10)
-	fmt.Printf("%v\n", s)
-
-	s = numbers.FindPrimeNumbers(35)
-	fmt.Printf("%v\n", s)
-
-	s = numbers.FindPrimeNumbers(100)
-	fmt.Printf("%v\n", s)
-
-	s = numbers.FindPrimeNumbers(100)
+	num := getInputNumber()
+	s := numbers.FindPrimeNumbers(num)
 	fmt.Printf("%v\n", s)
 }
