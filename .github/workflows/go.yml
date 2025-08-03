@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       artifact-path: ${{ steps.upload_build.outputs.artifact-name }}
     steps:
@@ -43,7 +43,7 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
     steps:
